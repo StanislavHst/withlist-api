@@ -182,3 +182,17 @@ migrate:
 health:
 	curl http://localhost:8000/health
 ```
+# Lab 4 — локальна підготовка
+
+Для локальної PostgreSQL задайте `DB_SSLMODE=disable` у приватному `.env`.
+Повний перелік параметрів наведений у `.env.example`.
+Після запуску PostgreSQL створіть таблиці один раз перед запуском API.
+
+```powershell
+python -c "from database import engine, Base; import models; Base.metadata.create_all(bind=engine)"
+python -m uvicorn main:app --port 8001
+```
+
+Перевірки виконуються командами `python -m ruff check .` і `python -m pytest -v`.
+Для pytest потрібна окрема база `wishlist_test` та запущений Redis.
+

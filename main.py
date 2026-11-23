@@ -10,8 +10,8 @@ from typing import List
 import redis
 import json
 
-from database import get_db, engine
-from models import Base, User, WishList, WishItem, WishItemStatus
+from database import get_db
+from models import User, WishList, WishItem
 from schemas import (
     UserCreate, UserResponse, Token, WishListCreate, WishListResponse,
     WishItemCreate, WishItemResponse, WishItemStatusResponse
@@ -23,7 +23,6 @@ from crud import (
     get_item_statuses
 )
 
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Wish List API", version="1.0.0")
 
@@ -52,7 +51,7 @@ app.add_middleware(
 )
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-redis_client = redis.from_url(REDIS_URL, decode_responses=True, ssl_cert_reqs="none")
+redis_client = redis.from_url(REDIS_URL, decode_responses=True)
 # ssl_cert_reqs="none" - Disable SSL certificate verification for Upstash
 
 
@@ -277,7 +276,7 @@ async def health_check():
     try:
         redis_client.ping()
         redis_status = "healthy"
-    except:
+    except redis.RedisError:
         redis_status = "unhealthy"
 
     return {
