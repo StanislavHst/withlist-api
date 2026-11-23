@@ -59,3 +59,5 @@ out/
 *.pid.lock
 
 *.DS_Store
+
+.ruff_cache/

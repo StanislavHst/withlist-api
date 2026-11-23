@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 
-import os
 import sys
-import subprocess
 import uvicorn
 
 
 def check_dependencies():
     try:
-        import fastapi
-        import redis
-        import sqlalchemy
+        __import__("fastapi")
+        __import__("redis")
+        __import__("sqlalchemy")
         print("✅ All dependencies installed")
         return True
     except ImportError as e:
